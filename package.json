@@ -1,0 +1,24 @@
+{
+  "name": "so.js",
+
+  "version": "0.0.1",
+
+  "author": "harold ozouf <harold.ozouf@epitech.eu>",
+
+  "description": "an other way to write css. Oriented object Css",
+
+  "keywords": [
+    "css",
+    "object",
+    "oriented"
+  ],
+
+  "dependencies" : {
+    "jison"    : "*"
+  },
+
+  "license": "MIT",
+  "engines": {
+    "node": ">=0.6"
+  }
+}

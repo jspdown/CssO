@@ -1,0 +1,9 @@
+
+Class 	MyList Extends List {
+	Function MyList(@plop):
+		"li" 	-> Std.li()
+	{
+		super();
+		border:  	none;
+	}
+}
