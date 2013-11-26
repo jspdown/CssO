@@ -1,5 +1,24 @@
 
-Import "plop.csso";
+//Import "plop.csso";
+
+Class 	List {
+	@listItemSize: 		20px;
+
+
+	Function List() :
+		"a" 	-> link();
+	{
+		display: 	block;
+		float: 		left;
+		width: 		100%;
+		height: 	(@listItemSize);
+	}
+
+	Function a() {
+		color: 		white;
+	}
+}
+
 
 Class 	MyList Extends List {
 	@lal: 			 (@plop - (2px * (3px * -1)));
@@ -10,12 +29,5 @@ Class 	MyList Extends List {
 		Super();
 		border:  	1px solid #ff0000;
 	}
-
-	Function lol(@p1, @p2, @p3) {
-
-	}
-}
-
-Class Plop {
 
 }

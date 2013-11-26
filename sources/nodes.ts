@@ -266,9 +266,18 @@ class 	NRoot extends ANode {
 	}
 
 	toJs(align) {
+		var modules = [];
 		var data = '';
-		for (var i = 0; i < this.body.length; i++)
+		//base
+		data += 'var _Base = require("./Base.js");\n\n';
+		//classes and imports
+		for (var i = 0; i < this.body.length; i++) {
+			if (this.body[i].type == 'class')
+				modules.push(this.body[i].name)
 			data += this.body[i].toJs(align);
+		}
+		for (var i = 0; modules.length; i++) 
+			data += 'module.exports.' + modules[i] + ' = ' + modules[i] + ';\n';
 		return (data);
 	}
 }
@@ -345,8 +354,6 @@ class 	NClass extends NBlockStatement {
 		//inheritance
 		if (this.isExtendedBy !== undefined)
 			data += '\n' + this.name + '.prototype = Object.create(' + this.isExtendedBy + '.prototype);\n\n';
-		else
-			data += '\n' + this.name + '.prototype = Object.create(_Base.prototype);\n\n';
 		//generate methods
 		for (var i = 0; i < this.body.length; i++) {
 			if (this.body[i].type == 'function' && this.body[i].name != this.name)
@@ -393,23 +400,6 @@ class 	NFunction extends NBlockStatement {
 		return (data);
 	}
 
-	defaultSuper(align) {
-		var data = '';
-		var nbrSuper = [];
-
-		for (var i = 0; i < this.body.length; i++) {
-			if (this.body[i].type == 'super')
-				nbrSuper.push(this.body[i]);
-		}
-
-		if (this.isExtendedBy == undefined) {
-			if (nbrSuper.length != 0)
-				throw Error('can\'t call Super() without inheritance');
-			data += setTabulation(align) + '_Base.call(this);\n';
-		}
-		return (data);
-	}
-
 	callSuper(align) {
 		var data = '';
 		var nbrSuper = [];
@@ -423,6 +413,10 @@ class 	NFunction extends NBlockStatement {
 				throw Error('can\'t call Super() more than one time per constructor');
 			nbrSuper[0].isExtendedBy = this.isExtendedBy;
 			data += nbrSuper[0].toJs(align);
+		}
+		else {
+			if (nbrSuper.length != 0)
+				throw Error('can\'t call Super() without inheritance');
 		}
 
 		return (data);
@@ -440,17 +434,13 @@ class 	NFunction extends NBlockStatement {
 				data += ', ' + this.arguments[i];
 		}
 		data += ') {\n';
-		//default super
-		data += this.defaultSuper(align + 1);
+		//generate base
+		data += setTabulation(align + 1) + 'var _base = new _Base()\n\n';
 		//declare constant
 		if (this.constant != undefined) {
 			for (var i = 0; i < this.constant.length; i++)
 				data += setTabulation(align + 1) + this.constant[i] + ';\n';
 		}
-		//generate childs
-		data += '\n';
-		for (var i = 0; i < this.childs.length; i++)
-			data += this.childs[i].toJs(align + 1);
 		//generate properties
 		data += '\n';
 		for (var i = 0; i < this.body.length; i++) {
@@ -459,8 +449,12 @@ class 	NFunction extends NBlockStatement {
 			else
 				data += this.body[i].toJs(align + 1);
 		}
+		//generate childs
+		data += '\n';
+		for (var i = 0; i < this.childs.length; i++)
+			data += this.childs[i].toJs(align + 1);
 		//return properties
-		data += setTabulation(align + 1) + 'return (this.getProperties());\n';
+		data += setTabulation(align + 1) + 'return (_base.get());\n';
 		//end
 		data += setTabulation(align) + '}\n';
 		return (data);
@@ -492,12 +486,12 @@ class 	NImport extends NSingleStatement {
 	}
 
 	getFileBaseName() {
-		return (this.file.split('.')[0]);
+		return (this.file.split('"')[1].split('.')[0]);
 	}
 
 	toJs(align) {
 		var data = '';
-		data += setTabulation(align) + 'var ' + this.getFileBaseName() + ' = ' + 'require(' + this.file + ');\n';
+		data += setTabulation(align) + 'var ' + this.getFileBaseName() + ' = ' + 'require("' + this.getFileBaseName()+ '.js");\n';
 		return (data);
 	}
 }
@@ -549,7 +543,7 @@ class 	NChild extends NSingleStatement {
 
 	toJs(align) {
 		var data = '';
-		data += setTabulation(align) + 'this.addChild(' + this.selector + ', ' + this.value.toJs(0) + ');\n';
+		data += setTabulation(align) + '_base.addChild(' + this.selector + ', ' + this.value.toJs(0) + ');\n';
 		return (data);
 	}
 }
@@ -593,7 +587,7 @@ class 	NSuper extends NSingleStatement {
 	toJs(align) {
 		var data = '';
 		if (this.isExtendedBy !== undefined)
-			data += setTabulation(align) + this.isExtendedBy + '.call(this);\n';
+			data += setTabulation(align) + '_base.inherit(' + this.isExtendedBy + '.call(this));\n';
 		else
 			throw Error('can\'t call Super without inheritance');
 		return (data);
@@ -623,14 +617,14 @@ class 	NProperty extends NSingleStatement {
 
 	toJs(align) {
 		var data = '';
-		data += setTabulation(align) + 'this.addProperty(' + this.name + ', [\n';
+		data += setTabulation(align) + '_base.addProperty(' + this.name + ', [';
 		for (var i = 0; i < this.value.length; i++) {
 			if (i == this.value.length - 1)
-				data += this.value[i].toJs(align + 1) + '\n';
+				data += this.value[i].toJs(0);
 			else
-				data += this.value[i].toJs(align + 1) + ',\n';
+				data += this.value[i].toJs(0) + ', ';
 		}
-		data += setTabulation(align) + ']);\n';
+		data += ']);\n';
 		return (data);
 	}
 }
@@ -756,7 +750,7 @@ class NConstantCall extends NSingleStatement {
 	}
 
 	toJs(align) {
-		return ('Constant(' + this.name + ')');
+		return (setTabulation(align) + 'Constant(' + this.name + ')');
 	}
 }
 
