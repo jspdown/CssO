@@ -8,6 +8,8 @@ function main(argc, argv) {
         var data = fs.readFileSync(argv[i], 'utf-8');
         var ast = parser.parse(data);
         console.log(ast.toAst(0));
+        console.log('####################' + 'TO JAVASCRIPT' + '##################\n\n');
+        console.log(ast.toJs(0));
     }
 }
 

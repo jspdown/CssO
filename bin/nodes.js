@@ -25,6 +25,10 @@ var Unit;
     Unit[Unit["Ex"] = 8] = "Ex";
     Unit[Unit["Pica"] = 9] = "Pica";
     Unit[Unit["Inch"] = 10] = "Inch";
+    Unit[Unit["String"] = 11] = "String";
+    Unit[Unit["Color"] = 12] = "Color";
+    Unit[Unit["Calc"] = 13] = "Calc";
+    Unit[Unit["Url"] = 14] = "Url";
 })(Unit || (Unit = {}));
 
 /* NODE */
@@ -41,11 +45,19 @@ var NString = (function (_super) {
     function NString(value) {
         _super.call(this, 'string');
         this.value = value;
+        this.unit = Unit.String;
     }
     NString.prototype.toAst = function (align) {
         var data = '';
         data += setTabulation(align) + 'NString: value = ' + this.value + '\n';
         return (data);
+    };
+
+    NString.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'String(' + this.value + ')');
+    };
+    NString.prototype.toString = function () {
+        return ('"' + this.value + '"');
     };
     return NString;
 })(ANode);
@@ -53,27 +65,43 @@ var NString = (function (_super) {
 var NUrl = (function (_super) {
     __extends(NUrl, _super);
     function NUrl(value) {
-        _super.call(this, value);
+        _super.call(this, 'url');
+        this.value = value;
+        this.unit = Unit.Url;
     }
     NUrl.prototype.toAst = function (align) {
         var data = '';
         data += setTabulation(align) + 'NUrl: value = ' + this.value + '\n';
         return (data);
     };
+
+    NUrl.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Url(' + this.value + ')');
+    };
+    NUrl.prototype.toString = function () {
+        return ('url(' + this.value + ')');
+    };
     return NUrl;
-})(NString);
+})(ANode);
+
 var NCalc = (function (_super) {
     __extends(NCalc, _super);
     function NCalc(value) {
-        console.log(value);
         _super.call(this, 'calc');
         this.value = value;
+        this.unit = Unit.Calc;
     }
     NCalc.prototype.toAst = function (align) {
         var data = '';
         data += setTabulation(align) + 'NCalc: value = \n';
         data += this.value.toAst(align + 1);
         return (data);
+    };
+    NCalc.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Calc(' + ')');
+    };
+    NCalc.prototype.toString = function () {
+        return ('calc()');
     };
     return NCalc;
 })(ANode);
@@ -84,12 +112,19 @@ var NNumber = (function (_super) {
     function NNumber(value, unit) {
         _super.call(this, 'number');
         this.value = value;
-        this.unit = (unit !== undefined ? unit : Unit.None);
+        this.unit = unit;
     }
     NNumber.prototype.toAst = function (align) {
         var data = '';
         data += setTabulation(align) + 'NNumber: value = ' + this.value + ' unit = ' + this.unit + '\n';
         return (data);
+    };
+
+    NNumber.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Number(' + this.value + ')');
+    };
+    NNumber.prototype.toString = function () {
+        return (this.value + '');
     };
     return NNumber;
 })(ANode);
@@ -99,6 +134,12 @@ var NPixel = (function (_super) {
     function NPixel(value) {
         _super.call(this, value, Unit.Pixel);
     }
+    NPixel.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Pixel(' + this.value + ')');
+    };
+    NPixel.prototype.toString = function () {
+        return (this.value + 'px');
+    };
     return NPixel;
 })(NNumber);
 
@@ -107,6 +148,12 @@ var NPercent = (function (_super) {
     function NPercent(value) {
         _super.call(this, value, Unit.Percent);
     }
+    NPercent.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Percent(' + this.value + ')');
+    };
+    NPercent.prototype.toString = function () {
+        return (this.value + '%');
+    };
     return NPercent;
 })(NNumber);
 
@@ -115,6 +162,12 @@ var NPoint = (function (_super) {
     function NPoint(value) {
         _super.call(this, value, Unit.Point);
     }
+    NPoint.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Point(' + this.value + ')');
+    };
+    NPoint.prototype.toString = function () {
+        return (this.value + 'pt');
+    };
     return NPoint;
 })(NNumber);
 
@@ -123,6 +176,12 @@ var NSecond = (function (_super) {
     function NSecond(value) {
         _super.call(this, value, Unit.Second);
     }
+    NSecond.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Second(' + this.value + ')');
+    };
+    NSecond.prototype.toString = function () {
+        return (this.value + 's');
+    };
     return NSecond;
 })(NNumber);
 
@@ -131,6 +190,12 @@ var NEm = (function (_super) {
     function NEm(value) {
         _super.call(this, value, Unit.Em);
     }
+    NEm.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Em(' + this.value + ')');
+    };
+    NEm.prototype.toString = function () {
+        return (this.value + 'em');
+    };
     return NEm;
 })(NNumber);
 
@@ -139,6 +204,12 @@ var NInch = (function (_super) {
     function NInch(value) {
         _super.call(this, value, Unit.Inch);
     }
+    NInch.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Inch(' + this.value + ')');
+    };
+    NInch.prototype.toString = function () {
+        return (this.value + 'in');
+    };
     return NInch;
 })(NNumber);
 
@@ -147,6 +218,12 @@ var NCentimeter = (function (_super) {
     function NCentimeter(value) {
         _super.call(this, value, Unit.Centimeter);
     }
+    NCentimeter.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Centimeter(' + this.value + ')');
+    };
+    NCentimeter.prototype.toString = function () {
+        return (this.value + 'cm');
+    };
     return NCentimeter;
 })(NNumber);
 
@@ -155,6 +232,12 @@ var NMillimeter = (function (_super) {
     function NMillimeter(value) {
         _super.call(this, value, Unit.Millimeter);
     }
+    NMillimeter.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Millimeter(' + this.value + ')');
+    };
+    NMillimeter.prototype.toString = function () {
+        return (this.value + 'mm');
+    };
     return NMillimeter;
 })(NNumber);
 
@@ -163,6 +246,12 @@ var NEx = (function (_super) {
     function NEx(value) {
         _super.call(this, value, Unit.Ex);
     }
+    NEx.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Ex(' + this.value + ')');
+    };
+    NEx.prototype.toString = function () {
+        return (this.value + 'ex');
+    };
     return NEx;
 })(NNumber);
 
@@ -171,6 +260,12 @@ var NPica = (function (_super) {
     function NPica(value) {
         _super.call(this, value, Unit.Pica);
     }
+    NPica.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Pica(' + this.value + ')');
+    };
+    NPica.prototype.toString = function () {
+        return (this.value + 'pc');
+    };
     return NPica;
 })(NNumber);
 
@@ -180,11 +275,19 @@ var NColor = (function (_super) {
     function NColor(value) {
         _super.call(this, 'color');
         this.value = value;
+        this.type = Unit.Color;
     }
     NColor.prototype.toAst = function (align) {
         var data = '';
         data = setTabulation(align) + 'NColor: value = #' + this.value + '\n';
         return (data);
+    };
+
+    NColor.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Color(' + this.value + ')');
+    };
+    NColor.prototype.toString = function () {
+        return ('#' + this.value);
     };
     return NColor;
 })(ANode);
@@ -206,9 +309,11 @@ var NRoot = (function (_super) {
         return (data);
     };
 
-    NRoot.prototype.toJs = function () {
+    NRoot.prototype.toJs = function (align) {
+        var data = '';
         for (var i = 0; i < this.body.length; i++)
-            this.body[i].toJs();
+            data += this.body[i].toJs(align);
+        return (data);
     };
     return NRoot;
 })(ANode);
@@ -221,6 +326,8 @@ var NBlockStatement = (function (_super) {
         this.name = name;
         this.body = body;
     }
+    NBlockStatement.prototype.toJs = function (align) {
+    };
     return NBlockStatement;
 })(ANode);
 
@@ -241,6 +348,51 @@ var NClass = (function (_super) {
             data += this.body[i].toAst(align + 1);
         }
         data += setTabulation(align) + ']\n';
+        return (data);
+    };
+
+    NClass.prototype.getConstructor = function () {
+        for (var i = 0; i < this.body.length; i++) {
+            if (this.body[i].type == 'function' && this.body[i].name == this.name)
+                return (this.body[i]);
+        }
+        return (undefined);
+    };
+
+    NClass.prototype.getConstant = function () {
+        var cst = [];
+        for (var i = 0; i < this.body.length; i++) {
+            if (this.body[i].type == 'constant')
+                cst.push(this.body[i].toJs(0));
+        }
+        return (cst);
+    };
+
+    NClass.prototype.toJs = function (align) {
+        var data = '';
+        var constant = [];
+        var ctor = this.getConstructor();
+
+        //render constant
+        constant = this.getConstant();
+
+        if (ctor == undefined)
+            ctor = new NFunction(this.name, true, [], [], [], false);
+
+        //generate constructor
+        ctor.constant = constant;
+        ctor.isExtendedBy = this.isExtendedBy;
+        data += 'var ' + ctor.name + ' = ' + ctor.toJs(align);
+
+        if (this.isExtendedBy !== undefined)
+            data += '\n' + this.name + '.prototype = Object.create(' + this.isExtendedBy + '.prototype);\n\n';
+else
+            data += '\n' + this.name + '.prototype = Object.create(_Base.prototype);\n\n';
+
+        for (var i = 0; i < this.body.length; i++) {
+            if (this.body[i].type == 'function' && this.body[i].name != this.name)
+                data += this.name + '.prototype.' + this.body[i].name + ' = ' + this.body[i].toJs(align);
+        }
         return (data);
     };
     return NClass;
@@ -275,6 +427,84 @@ var NFunction = (function (_super) {
         data += setTabulation(align) + '  ]\n';
         return (data);
     };
+
+    NFunction.prototype.defaultSuper = function (align) {
+        var data = '';
+        var nbrSuper = [];
+
+        for (var i = 0; i < this.body.length; i++) {
+            if (this.body[i].type == 'super')
+                nbrSuper.push(this.body[i]);
+        }
+
+        if (this.isExtendedBy == undefined) {
+            if (nbrSuper.length != 0)
+                throw Error('can\'t call Super() without inheritance');
+            data += setTabulation(align) + '_Base.call(this);\n';
+        }
+        return (data);
+    };
+
+    NFunction.prototype.callSuper = function (align) {
+        var data = '';
+        var nbrSuper = [];
+
+        for (var i = 0; i < this.body.length; i++) {
+            if (this.body[i].type == 'super')
+                nbrSuper.push(this.body[i]);
+        }
+        if (this.isExtendedBy !== undefined) {
+            if (nbrSuper.length > 1)
+                throw Error('can\'t call Super() more than one time per constructor');
+            nbrSuper[0].isExtendedBy = this.isExtendedBy;
+            data += nbrSuper[0].toJs(align);
+        }
+
+        return (data);
+    };
+
+    NFunction.prototype.toJs = function (align) {
+        var data = '';
+
+        //generate function
+        data += setTabulation(align) + 'function ' + '(';
+
+        if (this.arguments.length > 0) {
+            data += this.arguments[0];
+            for (var i = 1; i < this.arguments.length; i++)
+                data += ', ' + this.arguments[i];
+        }
+        data += ') {\n';
+
+        //default super
+        data += this.defaultSuper(align + 1);
+
+        if (this.constant != undefined) {
+            for (var i = 0; i < this.constant.length; i++)
+                data += setTabulation(align + 1) + this.constant[i] + ';\n';
+        }
+
+        //generate childs
+        data += '\n';
+        for (var i = 0; i < this.childs.length; i++)
+            data += this.childs[i].toJs(align + 1);
+
+        //generate properties
+        data += '\n';
+        for (var i = 0; i < this.body.length; i++) {
+            if (this.body[i].type == 'super')
+                data += this.callSuper(align + 1);
+else
+                data += this.body[i].toJs(align + 1);
+        }
+
+        //return properties
+        data += setTabulation(align + 1) + 'return (this.getProperties());\n';
+
+        //end
+        data += setTabulation(align) + '}\n';
+        return (data);
+    };
     return NFunction;
 })(NBlockStatement);
 
@@ -299,6 +529,16 @@ var NImport = (function (_super) {
         data += setTabulation(align) + '  _file = ' + this.file + '\n';
         return (data);
     };
+
+    NImport.prototype.getFileBaseName = function () {
+        return (this.file.split('.')[0]);
+    };
+
+    NImport.prototype.toJs = function (align) {
+        var data = '';
+        data += setTabulation(align) + 'var ' + this.getFileBaseName() + ' = ' + 'require(' + this.file + ');\n';
+        return (data);
+    };
     return NImport;
 })(NSingleStatement);
 
@@ -315,6 +555,12 @@ var NConstant = (function (_super) {
         data += setTabulation(align) + '  ' + 'name = ' + this.name + '\n';
         data += setTabulation(align) + '  ' + 'value = \n';
         data += this.value.toAst(align + 1);
+        return (data);
+    };
+
+    NConstant.prototype.toJs = function (align) {
+        var data = '';
+        data += setTabulation(align) + 'var ' + this.name + ' = ' + this.value.toJs(0);
         return (data);
     };
     return NConstant;
@@ -335,6 +581,12 @@ var NChild = (function (_super) {
         data += this.value.toAst(align + 1);
         return (data);
     };
+
+    NChild.prototype.toJs = function (align) {
+        var data = '';
+        data += setTabulation(align) + 'this.addChild(' + this.selector + ', ' + this.value.toJs(0) + ');\n';
+        return (data);
+    };
     return NChild;
 })(NSingleStatement);
 
@@ -350,6 +602,10 @@ var NValue = (function (_super) {
         data += setTabulation(align) + '  name = ' + this.name + '\n';
         return (data);
     };
+
+    NValue.prototype.toJs = function (align) {
+        return (setTabulation(align) + 'Value("' + this.name + '")');
+    };
     return NValue;
 })(NSingleStatement);
 
@@ -363,6 +619,15 @@ var NSuper = (function (_super) {
         var data = '';
         data += setTabulation(align) + 'NSuper:\n';
         data += setTabulation(align) + '  name = ' + this.name + '\n';
+        return (data);
+    };
+
+    NSuper.prototype.toJs = function (align) {
+        var data = '';
+        if (this.isExtendedBy !== undefined)
+            data += setTabulation(align) + this.isExtendedBy + '.call(this);\n';
+else
+            throw Error('can\'t call Super without inheritance');
         return (data);
     };
     return NSuper;
@@ -385,6 +650,19 @@ var NProperty = (function (_super) {
         data += setTabulation(align) + '  ]\n';
         return (data);
     };
+
+    NProperty.prototype.toJs = function (align) {
+        var data = '';
+        data += setTabulation(align) + 'this.addProperty(' + this.name + ', [\n';
+        for (var i = 0; i < this.value.length; i++) {
+            if (i == this.value.length - 1)
+                data += this.value[i].toJs(align + 1) + '\n';
+else
+                data += this.value[i].toJs(align + 1) + ',\n';
+        }
+        data += setTabulation(align) + ']);\n';
+        return (data);
+    };
     return NProperty;
 })(NSingleStatement);
 
@@ -405,6 +683,18 @@ var NFunctionCall = (function (_super) {
         data += setTabulation(align) + '  ]\n';
         return (data);
     };
+
+    NFunctionCall.prototype.toJs = function (align) {
+        var data = '';
+        data += setTabulation(align) + 'this.' + this.name + '(';
+        if (this.arguments.length > 0) {
+            data += this.arguments[0];
+            for (var i = 1; i < this.arguments.length; i++)
+                data += ',' + this.arguments[i];
+        }
+        data += ')';
+        return (data);
+    };
     return NFunctionCall;
 })(NSingleStatement);
 
@@ -423,6 +713,18 @@ var NClassCall = (function (_super) {
         for (var i = 0; i < this.arguments.length; i++)
             data += setTabulation(align + 1) + arguments[i] + '\n';
         data += setTabulation(align) + '  ]\n';
+        return (data);
+    };
+
+    NClassCall.prototype.toJs = function (align) {
+        var data = '';
+        data += setTabulation(align) + 'new ' + this.name + '(';
+        if (this.arguments.length > 0) {
+            data += this.arguments[0];
+            for (var i = 1; i < this.arguments.length; i++)
+                data += ',' + this.arguments[i];
+        }
+        data += ')';
         return (data);
     };
     return NClassCall;
@@ -447,6 +749,18 @@ var NStaticCall = (function (_super) {
         data += setTabulation(align) + '  ]\n';
         return (data);
     };
+
+    NStaticCall.prototype.toJs = function (align) {
+        var data = '';
+        data += setTabulation(align) + this.name + '.' + this.method + '(';
+        if (this.arguments.length > 0) {
+            data += this.arguments[0];
+            for (var i = 1; i < this.arguments.length; i++)
+                data += ',' + this.arguments[i];
+        }
+        data += ')';
+        return (data);
+    };
     return NStaticCall;
 })(NSingleStatement);
 
@@ -462,6 +776,10 @@ var NConstantCall = (function (_super) {
         data += setTabulation(align) + '  name = ' + this.name + '\n';
         return (data);
     };
+
+    NConstantCall.prototype.toJs = function (align) {
+        return ('Constant(' + this.name + ')');
+    };
     return NConstantCall;
 })(NSingleStatement);
 
@@ -473,6 +791,8 @@ var NOperator = (function (_super) {
         this.left = left;
         this.right = right;
     }
+    NOperator.prototype.toJs = function (align) {
+    };
     return NOperator;
 })(ANode);
 
@@ -489,6 +809,10 @@ var NMathPlus = (function (_super) {
         data += setTabulation(align) + '  right:\n';
         data += this.right.toAst(align + 1);
         return (data);
+    };
+
+    NMathPlus.prototype.toJs = function (align) {
+        return ('Add(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
     };
     return NMathPlus;
 })(NOperator);
@@ -507,6 +831,10 @@ var NMathMinus = (function (_super) {
         data += this.right.toAst(align + 1);
         return (data);
     };
+
+    NMathMinus.prototype.toJs = function (align) {
+        return ('Sub(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
+    };
     return NMathMinus;
 })(NOperator);
 
@@ -524,6 +852,10 @@ var NMathMult = (function (_super) {
         data += this.right.toAst(align + 1);
         return (data);
     };
+
+    NMathMult.prototype.toJs = function (align) {
+        return ('Mult(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
+    };
     return NMathMult;
 })(NOperator);
 
@@ -540,6 +872,10 @@ var NMathDiv = (function (_super) {
         data += setTabulation(align) + '  right:\n';
         data += this.right.toAst(align + 1);
         return (data);
+    };
+
+    NMathDiv.prototype.toJs = function (align) {
+        return ('Div(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
     };
     return NMathDiv;
 })(NOperator);

@@ -56,7 +56,7 @@
 "#"								return 'SHARP';
 
 '"'.+'"' 						return 'STRING';
-[A-F0-9]{6}						return 'HEXA';
+[A-Fa-f0-9]{6}						return 'HEXA';
 [0-9]+('.'[0-9]+)? 				return 'NUMBER';
 
 [A-Z][A-Za-z0-9]*				return 'CAP_ID';
@@ -90,7 +90,7 @@ decl:
 /* import */
 
 declImport:
-	IMPORT STRING 									{ $$ = new NNode.NImport($2) }
+	IMPORT STRING SEMI_COLON						{ $$ = new NNode.NImport($2) }
 ;
 
 /* class */
@@ -122,7 +122,7 @@ declConstant:
 constantValue:
 		L_PAR calculExpr R_PAR 						{ $$ = $2 }
 	|	calculValue
-	| 	MINUS calculValue %prec UMINUS				{ $$ = new NNode.NMathMult(new NNode.NNumber(-1), $2) }
+	| 	MINUS calculValue %prec UMINUS				{ $$ = new NNode.NMathMult(new NNode.NNumber(-1, NNode.Unit.None), $2) }
 	| 	specialValue
 ;
 
@@ -308,7 +308,7 @@ typeCalc:
 ;
 
 value:
-	NUMBER 											{ $$ = new NNode.NNumber($1) }
+	NUMBER 											{ $$ = new NNode.NNumber($1, NNode.Unit.None) }
 ;
 
 /* calcul */
@@ -318,7 +318,7 @@ calculExpr:
 	| 	calculExpr MINUS	calculExpr 				{ $$ = new NNode.NMathMinus($1, $3) }
 	| 	calculExpr MULT 	calculExpr 				{ $$ = new NNode.NMathMult($1, $3) }
 	| 	calculExpr DIV 		calculExpr 				{ $$ = new NNode.NMathDiv($1, $3) }
-	| 	MINUS calculExpr %prec UMINUS				{ $$ = new NNode.NMathMult(new NNode.NNumber(-1), $2) }
+	| 	MINUS calculExpr %prec UMINUS				{ $$ = new NNode.NMathMult(new NNode.NNumber(-1, NNode.Unit.None), $2) }
 	| 	L_PAR calculExpr R_PAR 						{ $$ = $2 }
 	| 	calculValue 								{ $$ = $1 }
 	| 	AT MIN_ID 									{ $$ = new NNode.NConstantCall($2) }

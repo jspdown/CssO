@@ -1,9 +1,21 @@
 
+Import "plop.csso";
+
 Class 	MyList Extends List {
-	Function MyList(@plop):
-		"li" 	-> Std.li()
+	@lal: 			 (@plop - (2px * (3px * -1)));
+
+	Function MyList(@plop) :
+		"li" 	-> Std.li();
 	{
-		super();
-		border:  	none;
+		Super();
+		border:  	1px solid #ff0000;
 	}
+
+	Function lol(@p1, @p2, @p3) {
+
+	}
+}
+
+Class Plop {
+
 }
