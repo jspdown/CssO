@@ -11,7 +11,7 @@ BIN			= ./bin
 TMP			= ./sources/tmp
 TEST		= ./test
 
-TEST_SRC 	= $(TEST)/basic.csso
+TEST_SRC 	= $(TEST)/test1.csso
 
 
 all: $(NAME)

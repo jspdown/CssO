@@ -58,7 +58,7 @@ class 	NString extends ANode {
 		return (data);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'String(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.STring(' + this.value + ')') }
 	toString() { return ('"' + this.value + '"') }
 }
 
@@ -78,7 +78,7 @@ class 	NUrl extends ANode {
 		return (data);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Url(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Url(' + this.value + ')') }
 	toString() { return ('url(' + this.value + ')') }
 }
 
@@ -98,7 +98,7 @@ class 	NCalc extends ANode {
 		data += this.value.toAst(align + 1);
 		return (data);
 	}
-	toJs(align) { return (setTabulation(align) + 'Calc(' + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Calc(' + ')') }
 	toString() { return ('calc()') }
 }
 
@@ -120,7 +120,7 @@ class 	NNumber extends ANode {
 		return (data);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Number(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Numeric(' + this.value + ')') }
 	toString() { return (this.value + '') }
 }
 
@@ -130,7 +130,7 @@ class 	NPixel extends NNumber {
 		super(value, Unit.Pixel);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Pixel(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Pixel(' + this.value + ')') }
 	toString() { return (this.value + 'px') }
 }
 
@@ -140,7 +140,7 @@ class 	NPercent extends NNumber {
 		super(value, Unit.Percent);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Percent(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Percent(' + this.value + ')') }
 	toString() { return (this.value + '%') }
 }
 
@@ -150,7 +150,7 @@ class 	NPoint extends NNumber {
 		super(value, Unit.Point);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Point(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Point(' + this.value + ')') }
 	toString() { return (this.value + 'pt') }
 }
 
@@ -160,7 +160,7 @@ class 	NSecond extends NNumber {
 		super(value, Unit.Second);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Second(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Second(' + this.value + ')') }
 	toString() { return (this.value + 's') }
 }
 
@@ -170,7 +170,7 @@ class 	NEm extends NNumber {
 		super(value, Unit.Em);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Em(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Em(' + this.value + ')') }
 	toString() { return (this.value + 'em') }
 }
 
@@ -180,7 +180,7 @@ class 	NInch extends NNumber {
 		super(value, Unit.Inch);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Inch(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Inch(' + this.value + ')') }
 	toString() { return (this.value + 'in') }
 }
 
@@ -190,7 +190,7 @@ class 	NCentimeter extends NNumber {
 		super(value, Unit.Centimeter);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Centimeter(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Centimeter(' + this.value + ')') }
 	toString() { return (this.value + 'cm') }
 }
 
@@ -200,7 +200,7 @@ class 	NMillimeter extends NNumber {
 		super(value, Unit.Millimeter);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Millimeter(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Millimeter(' + this.value + ')') }
 	toString() { return (this.value + 'mm') }
 }
 
@@ -210,7 +210,7 @@ class 	NEx extends NNumber {
 		super(value, Unit.Ex);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Ex(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new Ex(' + this.value + ')') }
 	toString() { return (this.value + 'ex') }
 }
 
@@ -220,7 +220,7 @@ class 	NPica extends NNumber {
 		super(value, Unit.Pica);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Pica(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Pica(' + this.value + ')') }
 	toString() { return (this.value + 'pc') }
 }
 /* COLOR */
@@ -241,7 +241,7 @@ class 	NColor extends ANode {
 		return (data);
 	}
 
-	toJs(align) { return (setTabulation(align) + 'Color(' + this.value + ')') }
+	toJs(align) { return (setTabulation(align) + 'new _base.Color("' + this.value + '")') }
 	toString() { return ('#' + this.value) }
 }
 
@@ -269,14 +269,15 @@ class 	NRoot extends ANode {
 		var modules = [];
 		var data = '';
 		//base
-		data += 'var _Base = require("./Base.js");\n\n';
+		data += 'var _base = require("../bin/base.js");\n\n';
+		data += 'console.log(_base.Pixel(2));\n';
 		//classes and imports
 		for (var i = 0; i < this.body.length; i++) {
 			if (this.body[i].type == 'class')
 				modules.push(this.body[i].name)
 			data += this.body[i].toJs(align);
 		}
-		for (var i = 0; modules.length; i++) 
+		for (var i = 0; i < modules.length; i++) 
 			data += 'module.exports.' + modules[i] + ' = ' + modules[i] + ';\n';
 		return (data);
 	}
@@ -435,7 +436,14 @@ class 	NFunction extends NBlockStatement {
 		}
 		data += ') {\n';
 		//generate base
-		data += setTabulation(align + 1) + 'var _base = new _Base()\n\n';
+		data += setTabulation(align + 1) + 'var _this = new _base.Base();\n';
+		if (this.isAConstructor == true)
+			data += setTabulation(align + 1) + 'this.constants = {};\n';
+		//redefining paramters
+		if (this.arguments.length > 0) {
+			for (var i = 0; i < this.arguments.length; i++)
+				data += 'this.constants.' + this.arguments[i] + ' = ' + this.arguments[i] + ';\n';
+		}
 		//declare constant
 		if (this.constant != undefined) {
 			for (var i = 0; i < this.constant.length; i++)
@@ -450,11 +458,12 @@ class 	NFunction extends NBlockStatement {
 				data += this.body[i].toJs(align + 1);
 		}
 		//generate childs
+		data += 'console.log("####> ' + this.name  + '", this);\n';
 		data += '\n';
 		for (var i = 0; i < this.childs.length; i++)
 			data += this.childs[i].toJs(align + 1);
 		//return properties
-		data += setTabulation(align + 1) + 'return (_base.get());\n';
+		data += setTabulation(align + 1) + 'return (_this.get());\n';
 		//end
 		data += setTabulation(align) + '}\n';
 		return (data);
@@ -517,7 +526,7 @@ class 	NConstant extends NSingleStatement {
 
 	toJs(align) {
 		var data = '';
-		data += setTabulation(align) + 'var ' + this.name + ' = ' + this.value.toJs(0);
+		data += setTabulation(align) + 'this.constants.' + this.name + ' = ' + this.value.toJs(0);
 		return (data);
 	}
 }
@@ -543,7 +552,7 @@ class 	NChild extends NSingleStatement {
 
 	toJs(align) {
 		var data = '';
-		data += setTabulation(align) + '_base.addChild(' + this.selector + ', ' + this.value.toJs(0) + ');\n';
+		data += setTabulation(align) + '_this.addChild(' + this.selector + ', ' + this.value.toJs(0) + ');\n';
 		return (data);
 	}
 }
@@ -564,7 +573,7 @@ class 	NValue extends NSingleStatement {
 	}
 
 	toJs(align) {
-		return (setTabulation(align) + 'Value("' + this.name + '")');
+		return (setTabulation(align) + 'new _base.Value("' + this.name + '")');
 	}
 }
 
@@ -587,7 +596,7 @@ class 	NSuper extends NSingleStatement {
 	toJs(align) {
 		var data = '';
 		if (this.isExtendedBy !== undefined)
-			data += setTabulation(align) + '_base.inherit(' + this.isExtendedBy + '.call(this));\n';
+			data += setTabulation(align) + '_this.inherit(this, ' + this.isExtendedBy + ');\n';
 		else
 			throw Error('can\'t call Super without inheritance');
 		return (data);
@@ -617,7 +626,7 @@ class 	NProperty extends NSingleStatement {
 
 	toJs(align) {
 		var data = '';
-		data += setTabulation(align) + '_base.addProperty(' + this.name + ', [';
+		data += setTabulation(align) + '_this.addProperty("' + this.name + '", [';
 		for (var i = 0; i < this.value.length; i++) {
 			if (i == this.value.length - 1)
 				data += this.value[i].toJs(0);
@@ -645,7 +654,7 @@ class 	NFunctionCall extends NSingleStatement {
 		data += setTabulation(align) + '  ' + 'name = ' + this.name + '\n';
 		data += setTabulation(align) + '  ' + 'arguments = [\n';
 		for (var i = 0; i < this.arguments.length; i++)
-			data += setTabulation(align +1) +  this.arguments[i] + '\n';
+			data += setTabulation(align +1) + this.arguments[i] + '\n';
 		data += setTabulation(align) + '  ]\n';
 		return (data);
 	}
@@ -654,9 +663,9 @@ class 	NFunctionCall extends NSingleStatement {
 		var data = '';
 		data += setTabulation(align) + 'this.' + this.name + '(';
 		if (this.arguments.length > 0) {
-			data += this.arguments[0]
+			data += 'this.constants.' + this.arguments[0]
 			for (var i = 1; i < this.arguments.length; i++)
-				data += ',' + this.arguments[i];
+				data += ', this.constants.' + this.arguments[i];
 		}
 		data += ')';
 		return (data);
@@ -688,9 +697,9 @@ class 	NClassCall extends NSingleStatement {
 		var data = '';
 		data += setTabulation(align) + 'new ' + this.name + '('
 		if (this.arguments.length > 0) {
-			data += this.arguments[0]
+			data += 'this.constants.' + this.arguments[0]
 			for (var i = 1; i < this.arguments.length; i++)
-				data += ',' + this.arguments[i];
+				data += ', this.constants.' + this.arguments[i];
 		}
 		data += ')';
 		return (data);
@@ -716,7 +725,7 @@ class 	NStaticCall extends NSingleStatement {
 		data += setTabulation(align) + '  ' + 'method = ' + this.method + '\n';
 		data += setTabulation(align) + '  ' + 'arguments = [\n';
 		for (var i = 0; i < this.arguments.length; i++)
-			data += setTabulation(align + 1) +  this.arguments[i] + '\n'
+			data += setTabulation(align + 1) + this.arguments[i] + '\n'
 		data += setTabulation(align) + '  ]\n';
 		return (data);
 	}
@@ -725,9 +734,9 @@ class 	NStaticCall extends NSingleStatement {
 		var data = '';
 		data += setTabulation(align) + this.name + '.' + this.method + '(';
 		if (this.arguments.length > 0) {
-			data += this.arguments[0]
+			data += 'this.constants.' + this.arguments[0]
 			for (var i = 1; i < this.arguments.length; i++)
-				data += ',' + this.arguments[i];
+				data += ', this.constants.' + this.arguments[i];
 		}
 		data += ')';
 		return (data);
@@ -750,7 +759,7 @@ class NConstantCall extends NSingleStatement {
 	}
 
 	toJs(align) {
-		return (setTabulation(align) + 'Constant(' + this.name + ')');
+		return (setTabulation(align) + 'this.constants.' + this.name);
 	}
 }
 
@@ -787,7 +796,7 @@ class NMathPlus extends NOperator {
 	}
 
 	toJs(align) {
-		return ('Add(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
+		return ('_base.Add(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
 	}
 }
 
@@ -808,7 +817,7 @@ class NMathMinus extends NOperator {
 	}
 
 	toJs(align) {
-		return ('Sub(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
+		return ('_base.Sub(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
 	}
 }
 
@@ -830,7 +839,7 @@ class NMathMult extends NOperator {
 	}
 
 	toJs(align) {
-		return ('Mult(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
+		return ('_base.Mult(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
 	}
 }
 
@@ -852,7 +861,7 @@ class NMathDiv extends NOperator {
 	}
 
 	toJs(align) {
-		return ('Div(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
+		return ('_base.Div(' + this.left.toJs() + ', ' + this.right.toJs() + ')');
 	}
 }
 

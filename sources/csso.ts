@@ -13,8 +13,8 @@ enum	Debug {
 	High
 };
 
-console.prototype.debug = function (currentMode, debugMode, msg) {
-	if (currentMode <= debugMode)
+function printDebug(currentMode, debugMode, msg) {
+	if (debugMode <= currentMode)
 		console.log(msg);
 }
 
@@ -24,47 +24,50 @@ class 	Csso {
 	file;
 
 	constructor(file, debug) {
-		console.debug(this.debug, Debug.Low, '[' + this.file + '][INFO]:\tpreparing...');
+		printDebug(this.debug, Debug.Low, '[' + this.file + '][INFO]:\tpreparing...');
 		this.debug = debug;
 		this.file = file;
 		this.ast = undefined;
-		return (this);
 	}
 
 	parse() {
-		console.debug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tpreparing parsing.');
+		printDebug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tpreparing parsing.');
 		var data = fs.readFileSync(this.file, 'utf-8');
 		this.ast = Parser.parse(data);
-		console.debug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tOK.');
-		console.debug(this.debug, Debug.High, "########################## - AST - ##########################");
-		console.debug(this.debug, Debug.High, this.ast.toAst(0));
-		return (this);
+		printDebug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tOK.');
+		printDebug(this.debug, Debug.High, "########################## - AST - ##########################");
+		printDebug(this.debug, Debug.High, this.ast.toAst(0));
 	}
 
 	convert() {
 		if (this.ast === undefined)
 			throw Error('can\'t convert file to javascript if file doesn\'t exist...');
-		console.debug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tpreparing javascript generation.')
+		printDebug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tpreparing javascript generation.');
 		var data = this.ast.toJs(0);
 		fs.writeFileSync(this.file + '.js', data, 'utf-8');
-		console.debug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tOK.')
-		console.debug(this.debug, Debug.High, "########################## - JS - ###########################");
-		console.debug(this.debug, Debug.High, data);
+		printDebug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tOK.')
+		printDebug(this.debug, Debug.High, "########################## - JS - ###########################");
+		printDebug(this.debug, Debug.High, data);
 	}
 
 	generate() {
-		console.debug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tpreparing Css generation.');
-		var jsFile = require(this.file + '.js');
+		printDebug(this.debug, Debug.Medium, '[' + this.file + '][INFO]:\tpreparing Css generation.');
+		var jsFile = require('../' + this.file + '.js');
 		var Html = new jsFile.Html();
-		console.debug(this.debug, Debug.High, "########################## - JSON - #########################");
-		console.debug(this.debug, Debug.High, Html);
+		printDebug(this.debug, Debug.High, "########################## - JSON - #########################");
+		printDebug(this.debug, Debug.High, JSON.stringify(Html));
+		printDebug(this.debug, Debug.High, "########################## - CSS - #########################");
+		console.log(Html.toCss(''));
 	}
 }
 
 function 	main(argc, argv) {
 	var beginArg = (argv[0] == 'node' ? 2 : 1);
 	for (var i = beginArg; i < argc; i++) {
-		new Csso(argv[i], Debug.High).parse().convert().generate();
+		var file = new Csso(argv[i], Debug.High);
+		file.parse();
+		file.convert();
+		file.generate();
 	}
 
 }

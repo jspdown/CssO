@@ -31,15 +31,28 @@
 //		- File imported give access to all their classes and their imports
 
 
+
 // 	-- CssO Syntax and AST--
 
-Import "lib/Std.csso"
+//Import "lib/Std.csso";
+
+Class 	List {
+	Function List() {
+		width:  		100%;
+	}
+}
+
+Class 	Link {
+	@ll: 				2px;
+	Function 	Link() {
+		color: 			#ff0000;
+	}
+}
 
 Class 	MyList Extends List {
 	@color1: 			#424242;
 
 	Function MyList(@str) :
-		"li" 			-> Std.li();
 		"li:hover" 		-> hover();
 		"li a" 			-> New Link();
 		"li a:after" 	-> after(@str);
@@ -50,11 +63,11 @@ Class 	MyList Extends List {
 	}
 
 	Function hover() {
-		color: 			@color1;
+		color: 			(@color1);
 	}
 	
 	Function after(@str) {
-		content: 		@str;
+		content: 		(@str);
 	}
 
 	Static Function last() :
@@ -64,113 +77,13 @@ Class 	MyList Extends List {
 	}
 }
 
-	// Class:
-	// 	_name: 		'MyList';
-	// 	_inherit: 	'List';
-	// 	_body: 	[
-	// 		Variable:
-	// 			_name: 		'color1';
-	// 			_value: 	Color: #424242;
-	// 		Function:
-	// 			_name: 		'MyList';
-	// 			_static: 	false
-	// 			_parameters [
-	// 				"str"
-	// 			]
-	// 			_childs: [
-	// 				Child:
-	// 					_selector: 'li'
-	// 					_value: 	StaticFunctionCall:
-	// 						_class: 	'Std'
-	// 						_name: 		'li'
-	// 						_parameters: [];
-	// 				Child:
-	// 					_selector: 'li:hover'
-	// 					_value: 	FunctionCall:
-	// 						_name: 		'hover'
-	// 						_parameters: [];
-	// 				Child:
-	// 					_selector: 'li a'
-	// 					_value: 	ClassCall:
-	// 						_name: 		'Link'
-	// 						_parameters: [];
-	// 				Child:
-	// 					_selector: 	'li a:after';
-	// 					_value: 	FunctionCall:
-	// 						_name: 	 	'after';
-	// 						_parameters: [
-	// 							VariableCall: 'str'
-	// 						]
-	// 			]
-	// 			_body: [
-	// 				Property:
-	// 					_name: 		'display'
-	// 					_value: [
-	// 						Value: 	block;
-	// 					]
-	// 				Property:
-	// 					_name: 		'border'
-	// 					_value: [
-	// 						Pixel: 	'1'
-	// 						Value: 	'solid'
-	// 						Value: 	'black'
-	// 					]
-	// 			]
-	// 		Function:
-	// 			_name: 		'hover'
-	// 			_static: 	false
-	// 			_parameters: []
-	// 			_body: [
-	// 				Property:
-	// 					_name: 	'color'
-	// 					_value: [
-	// 						VariableCall: 'color1'
-	// 					]
-	// 			]
-	// 		Function:
-	// 			_name: 			'after'
-	// 			_static: 		false
-	// 			_parameters:  	[
-	// 				'str'
-	// 			]
-	// 			_body: [
-	// 				Property:
-	// 					_name: 	'content'
-	// 					_value: [
-	// 						VariableCall: 'str'
-	// 					]
-	// 			]
-	// 		Function:
-	// 			_name: 		'last'
-	// 			_static: 	true
-	// 			_parameters: []
-	// 			_childs: [
-	// 				Child:
-	// 					_selector: 	'a';
-	// 					_value: 	StaticFunctionCall:
-	// 						_class: 	'Std'
-	// 						_name: 		'a'
-	// 						_parameters: [];
-	// 					]	
-	// 			]
-	// 			_body: [
-	// 				Property:
-	// 					_name: 	'background'
-	// 					_value: [
-	// 						Value: 'yellow'
-	// 					]
-	// 			]
-	// 	]
-
-
-
-
 	// Html Class -> entry point
 
 
 Class 	Html {
 	@arrow: 	"->";
 	@msg: 		"hello_world!";
+	@calcs: 		(2px * 5 + 1px);
 
 	Function Html() :
 		"ul" 			-> New MyList(@arrow);
@@ -180,7 +93,7 @@ Class 	Html {
 
 	Function setTitle(@bg) {
 		color: 			#424242;
-		background: 	white url("plop.png"); // set background with "hello_world.png"
+//		background: 	white url("plop.png"); // set background with "hello_world.png"
 	}
 
 }
