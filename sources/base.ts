@@ -69,10 +69,8 @@ class 	Property {
 		var data = '';
 
 		data += '\t' + this.name + ':\t';
-		for (var i = 0; i < this.values.length; i++) {
-			console.log('-----#> ', this.values[i]);
-			data += this.values[i].toString() + ' ';
-		}
+		for (var i = 0; i < this.values.length; i++)
+			data += this.values[i].toString() + ((i == this.values.length - 1) ? '' : ' ');
 		data += ';\n';
 		return (data);
 	}
@@ -89,7 +87,9 @@ class 	Child {
 
 	toCss(parent_selector) {
 		var data = '';
-		data += this.value.toCss(parent_selector + ' ' + this.selector);
+		var separator = (this.selector[0] == ':') ? '' : ' ';
+		separator = (parent_selector == '') ? '' : separator;
+		data += this.value.toCss(parent_selector + separator + this.selector);
 		return (data);
 	}
 }

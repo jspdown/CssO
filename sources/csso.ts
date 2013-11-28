@@ -57,7 +57,9 @@ class 	Csso {
 		printDebug(this.debug, Debug.High, "########################## - JSON - #########################");
 		printDebug(this.debug, Debug.High, JSON.stringify(Html));
 		printDebug(this.debug, Debug.High, "########################## - CSS - #########################");
-		console.log(Html.toCss(''));
+		var css = Html.toCss('');
+		fs.writeFileSync(this.file + '.css', css, 'utf-8');
+
 	}
 }
 

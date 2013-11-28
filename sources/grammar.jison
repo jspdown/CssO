@@ -56,11 +56,11 @@
 "#"								return 'SHARP';
 
 '"'.+'"' 						return 'STRING';
-[A-Fa-f0-9]{6}						return 'HEXA';
+[A-Fa-f0-9]{6}					return 'HEXA';
 [0-9]+('.'[0-9]+)? 				return 'NUMBER';
 
-[A-Z][A-Za-z0-9]*				return 'CAP_ID';
-[a-z][A-Za-z0-9]* 				return 'MIN_ID';
+[A-Z][A-Za-z0-9_-]*				return 'CAP_ID';
+[a-z][A-Za-z0-9_-]* 				return 'MIN_ID';
 
 
 /lex
@@ -120,9 +120,7 @@ declConstant:
 ;
 
 constantValue:
-		L_PAR calculExpr R_PAR 						{ $$ = $2 }
-	|	calculValue
-	| 	MINUS calculValue %prec UMINUS				{ $$ = new NNode.NMathMult(new NNode.NNumber(-1, NNode.Unit.None), $2) }
+		calculExpr
 	| 	specialValue
 ;
 

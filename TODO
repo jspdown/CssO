@@ -1,0 +1,30 @@
+
+
+PARSING:
+	- find a way to handle parsing error (line nbr and the reason)
+	- list all css keyword and use it as a token.
+	- reduce conflict in JISON
+	- string can be with simple or double quotes
+	- value inside function call parameters;
+
+CSSO TO JS:
+	- reduce number of class (Numbers...)
+	- simplify the translation step
+
+JS TO CSS:
+	- find way to generate a better code.
+
+BIN:
+	- handle command line parsing.
+
+FEATURES:
+	- possibility to declare some constants in functions
+	- imports
+	- imports namespacing for symboles utilisation
+	- STD library (import library)
+	- work on the syntax. reduce similarities with standards OO languages.
+	- write a node package able to interpret csso in live
+
+
+BUGS:
+	- calc() function. only replace constants.

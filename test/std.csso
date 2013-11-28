@@ -1,0 +1,27 @@
+
+
+
+Class Link {
+
+	Function 	Link(@normalColor, @hoverColor) :
+		":hover" 	-> 	hover(@hoverColor);
+	{
+		color: 		@normalColor;
+	}
+
+	Function 	hover(@color) {
+		text-decoration: 	none;
+		color: 				@color;
+	}
+}
+
+Class Html {
+	@color1: 	#ff0000;
+	@color2: 	#ffff00;
+
+	Function 	Html() :
+		"a" 	-> 	New Link(@color1, @color2);
+	{
+
+	}
+}
